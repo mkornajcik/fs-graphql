@@ -14,7 +14,7 @@ const AuthorSelect = ({ value, onChange }) => {
   }
 
   return (
-    <select required value={value} onChange={({ target }) => onChange(target.value)}>
+    <select name="name" required value={value} onChange={({ target }) => onChange(target.value)}>
       <option value="" disabled>
         select an author
       </option>
@@ -27,15 +27,18 @@ const AuthorSelect = ({ value, onChange }) => {
   );
 };
 
-const UpdateAuthor = (props) => {
+const UpdateAuthor = ({ show, setError }) => {
   const [name, setName] = useState("");
   const [born, setBorn] = useState("");
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
+    onError: (error) => {
+      setError(error.message);
+    },
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
 
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
@@ -51,6 +54,7 @@ const UpdateAuthor = (props) => {
 
   return (
     <div>
+      <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
           <label>

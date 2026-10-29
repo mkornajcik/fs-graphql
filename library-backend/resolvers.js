@@ -35,6 +35,7 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser;
     },
+    allGenres: async () => Book.distinct("genres"),
   },
   Author: {
     bookCount: async (author) => {
@@ -124,7 +125,7 @@ const resolvers = {
       const user = await User.findOne({ username: args.username });
 
       if (!user || args.password !== "secret") {
-        throw new GraphQLError("wrong credentials", {
+        throw new GraphQLError("login failed", {
           extensions: {
             code: "BAD_USER_INPUT",
           },
